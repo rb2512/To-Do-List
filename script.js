@@ -9,9 +9,9 @@ const btn = document.getElementById("boutton");
 const errorMessage = document.getElementById("errorMessage");
 const taskList = document.getElementById("taskList");
 
-// Afficher le localStorage
-document.addEventListener('DOMContentLoaded', () => {
-    tasks.forEach(task => {
+// Création de ma fonction createTaskElement
+function createTaskElement(task) {
+    // Création de l'element de liste
         const p = document.createElement("p");
         p.textContent = task;
         p.classList.add("task-style");
@@ -33,9 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
         p.appendChild(btnModifier);
         p.appendChild(btnSupprimer);
 
-        taskList.appendChild(p);
+    return p;
+}
+
+// Afficher le localStorage
+document.addEventListener('DOMContentLoaded', () => {
+    tasks.forEach(task => {
+        taskList.appendChild(createTaskElement(task))
     })
-})
+});
 
 // Evenement pour le bouton
 btn.addEventListener("click", () => {
@@ -44,32 +50,7 @@ btn.addEventListener("click", () => {
     } else {
         tasks.push(taskInput.value);
         localStorage.setItem("tasks", JSON.stringify(tasks));
-
-        // Création de l'element de liste
-        const p = document.createElement("p");
-        p.textContent = taskInput.value;
-        p.classList.add("task-style");
-
-        // Création de la checkbox
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-
-        // Création du btn modifier
-        const btnModifier = document.createElement("button");
-        btnModifier.textContent = "Modifier";
-
-        //Création du btn Supprimer
-        const btnSupprimer = document.createElement("button");
-        btnSupprimer.textContent = "Supprimer"
-
-        // Assembler les éléments
-        p.appendChild(checkbox);
-        p.appendChild(btnModifier);
-        p.appendChild(btnSupprimer);
-
-        taskList.appendChild(p);
-        // Vider l'input et remettre le message d'erreur a display:none
-        const rollBackTaskInput = taskInput.value;
+        taskList.appendChild(createTaskElement(taskInput.value));
         taskInput.value = "";
         errorMessage.style.display = "none";
 
@@ -79,7 +60,6 @@ btn.addEventListener("click", () => {
 taskList.addEventListener ("click", (event) => {
   // Déclarer les constantes //
   const reponseTagName = event.target.tagName;
-  const reponseText = event.target.textContent;
   const reponseParent = event.target.parentElement;
 
   // If pour vérifier si c'est un bouton
@@ -100,9 +80,6 @@ taskList.addEventListener ("click", (event) => {
       localStorage.setItem("tasks", JSON.stringify(tasks));
       reponseParent.firstChild.textContent = nouvelleValeur;
     }
-  } else {
-    console.log("Ce n'est pas un bouton")
-  }
-
+  };
 })
 // Test de git commit
