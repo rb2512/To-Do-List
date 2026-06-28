@@ -73,13 +73,36 @@ btn.addEventListener("click", () => {
         taskInput.value = "";
         errorMessage.style.display = "none";
 
-        // Gérer l'event du bouton Supprimer
-        btnSupprimer.addEventListener("click", () => {
-            p.remove();
-            const index = tasks.indexOf(rollBackTaskInput);
-            tasks.splice(index, 1);
-            localStorage.setItem("tasks", JSON.stringify(tasks));
-        })
-
     }
 });
+
+taskList.addEventListener ("click", (event) => {
+  // Déclarer les constantes //
+  const reponseTagName = event.target.tagName;
+  const reponseText = event.target.textContent;
+  const reponseParent = event.target.parentElement;
+
+  // If pour vérifier si c'est un bouton
+  if (reponseTagName === "BUTTON") {
+    // If pour vérifier si c'est le bouton Supprimer
+    if (event.target.textContent === "Supprimer") {
+      reponseParent.remove();
+      const index = tasks.indexOf(reponseParent.firstChild.textContent);
+      tasks.splice(index, 1);
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+    if (event.target.textContent === "Modifier") {
+      // Déclarer les constantes
+      const actuelleValeur = reponseParent.firstChild.textContent;
+      const nouvelleValeur = prompt("Tâche à modifier:", actuelleValeur);
+      const index = tasks.indexOf(actuelleValeur);
+      tasks.splice(index, 1, nouvelleValeur);
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      reponseParent.firstChild.textContent = nouvelleValeur;
+    }
+  } else {
+    console.log("Ce n'est pas un bouton")
+  }
+
+})
+// Test de git commit
